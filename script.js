@@ -7,19 +7,16 @@ document.addEventListener('mousemove', (e) => {
     cursorGlow.style.transform = `translate(${e.clientX - 100}px, ${e.clientY - 100}px)`;
 });
 
-// Generate Particles - MORE and BIGGER!
+// Generate Particles
 function createParticles() {
     const container = document.getElementById('particles');
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < 50; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
         particle.style.left = Math.random() * 100 + '%';
         particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 5 + 's';
-        particle.style.animationDuration = (Math.random() * 5 + 3) + 's';
-        const size = Math.random() * 12 + 6;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
+        particle.style.animationDelay = Math.random() * 10 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 5) + 's';
         container.appendChild(particle);
     }
 }
@@ -107,12 +104,11 @@ if (cubeContainer) {
     });
 }
 
-// Particle Canvas System - EXTREME CONNECTIONS!
+// Particle Canvas System
 const canvas = document.getElementById('particleCanvas');
 if (canvas) {
     const ctx = canvas.getContext('2d');
     let particlesArray = [];
-    let hue = 0;
     
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -127,10 +123,10 @@ if (canvas) {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 6 + 3;
-            this.speedX = Math.random() * 4 - 2;
-            this.speedY = Math.random() * 4 - 2;
-            this.hue = Math.random() * 360;
+            this.size = Math.random() * 3 + 1;
+            this.speedX = Math.random() * 3 - 1.5;
+            this.speedY = Math.random() * 3 - 1.5;
+            this.color = `hsl(${Math.random() * 60 + 120}, 100%, 50%)`;
         }
         
         update() {
@@ -144,24 +140,19 @@ if (canvas) {
             if (this.y > canvas.height || this.y < 0) {
                 this.speedY *= -1;
             }
-            
-            this.hue = (this.hue + 1) % 360;
         }
         
         draw() {
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = `hsl(${this.hue}, 100%, 60%)`;
-            ctx.fillStyle = `hsl(${this.hue}, 100%, 60%)`;
+            ctx.fillStyle = this.color;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
-            ctx.shadowBlur = 0;
         }
     }
     
     function init() {
         particlesArray = [];
-        const numberOfParticles = 150;
+        const numberOfParticles = 100;
         
         for (let i = 0; i < numberOfParticles; i++) {
             particlesArray.push(new Particle());
@@ -169,44 +160,29 @@ if (canvas) {
     }
     
     function animate() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         for (let i = 0; i < particlesArray.length; i++) {
             particlesArray[i].update();
             particlesArray[i].draw();
             
-            // Connect particles with gradient lines
+            // Connect particles
             for (let j = i + 1; j < particlesArray.length; j++) {
                 const dx = particlesArray[i].x - particlesArray[j].x;
                 const dy = particlesArray[i].y - particlesArray[j].y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                if (distance < 200) {
-                    const opacity = 1 - distance / 200;
-                    const avgHue = (particlesArray[i].hue + particlesArray[j].hue) / 2;
-                    
-                    const gradient = ctx.createLinearGradient(
-                        particlesArray[i].x, particlesArray[i].y,
-                        particlesArray[j].x, particlesArray[j].y
-                    );
-                    gradient.addColorStop(0, `hsla(${particlesArray[i].hue}, 100%, 60%, ${opacity})`);
-                    gradient.addColorStop(1, `hsla(${particlesArray[j].hue}, 100%, 60%, ${opacity})`);
-                    
-                    ctx.strokeStyle = gradient;
-                    ctx.lineWidth = 3 * opacity;
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = `hsla(${avgHue}, 100%, 60%, ${opacity})`;
+                if (distance < 100) {
+                    ctx.strokeStyle = `rgba(0, 255, 136, ${1 - distance / 100})`;
+                    ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
                     ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
                     ctx.stroke();
-                    ctx.shadowBlur = 0;
                 }
             }
         }
         
-        hue = (hue + 1) % 360;
         requestAnimationFrame(animate);
     }
     
@@ -341,61 +317,44 @@ if (morphingSvg) {
     });
 }
 
-// Matrix Digital Rain Effect - EXTREME MODE!
+// Matrix Digital Rain Effect
 const matrixCanvas = document.getElementById('matrixCanvas');
 if (matrixCanvas) {
     const ctx = matrixCanvas.getContext('2d');
     matrixCanvas.width = window.innerWidth;
     matrixCanvas.height = window.innerHeight;
     
-    const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%█▓▒░";
-    const fontSize = 20;
+    const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
+    const fontSize = 16;
     const columns = matrixCanvas.width / fontSize;
     const drops = [];
     
     for (let i = 0; i < columns; i++) {
-        drops[i] = Math.random() * -100;
+        drops[i] = 1;
     }
     
-    let hue = 0;
-    
     function drawMatrix() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
         ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        
+        ctx.fillStyle = '#0F0';
+        ctx.font = fontSize + 'px monospace';
         
         for (let i = 0; i < drops.length; i++) {
             const text = matrix[Math.floor(Math.random() * matrix.length)];
-            
-            // Varying colors for more drama
-            if (drops[i] * fontSize > matrixCanvas.height * 0.8) {
-                ctx.fillStyle = `hsl(${(hue + i * 10) % 360}, 100%, 70%)`;
-            } else if (drops[i] * fontSize > matrixCanvas.height * 0.5) {
-                ctx.fillStyle = `hsl(${(hue + i * 5) % 360}, 100%, 60%)`;
-            } else {
-                ctx.fillStyle = '#0F0';
-            }
-            
-            ctx.font = (fontSize + Math.random() * 8) + 'px monospace';
             ctx.fillText(text, i * fontSize, drops[i] * fontSize);
             
-            // Add glow effect
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = ctx.fillStyle;
-            
-            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.95) {
+            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
-            drops[i] += 0.8 + Math.random() * 0.8;
+            drops[i]++;
         }
-        
-        hue = (hue + 0.5) % 360;
-        ctx.shadowBlur = 0;
     }
     
-    setInterval(drawMatrix, 20);
+    setInterval(drawMatrix, 35);
 }
 
-// Time Warp Distortion Canvas - EXTREME RIPPLES!
+// Time Warp Distortion Canvas
 const warpCanvas = document.getElementById('warpCanvas');
 if (warpCanvas) {
     const ctx = warpCanvas.getContext('2d');
@@ -404,58 +363,52 @@ if (warpCanvas) {
     
     let time = 0;
     const ripples = [];
-    let hue = 0;
     
     class Ripple {
         constructor(x, y) {
             this.x = x;
             this.y = y;
             this.radius = 0;
-            this.maxRadius = 600;
-            this.speed = 8;
+            this.maxRadius = 300;
+            this.speed = 3;
             this.alpha = 1;
-            this.hue = hue;
         }
         
         update() {
             this.radius += this.speed;
             this.alpha = 1 - (this.radius / this.maxRadius);
-            this.speed *= 1.02;
         }
         
         draw() {
-            for (let i = 0; i < 5; i++) {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius + (i * 40), 0, Math.PI * 2);
-                ctx.strokeStyle = `hsla(${(this.hue + i * 30) % 360}, 100%, 60%, ${this.alpha * (1 - i * 0.15)})`;
-                ctx.lineWidth = 6 - i;
-                ctx.shadowBlur = 30;
-                ctx.shadowColor = ctx.strokeStyle;
-                ctx.stroke();
-            }
-            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(0, 255, 136, ${this.alpha})`;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius + 20, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(0, 136, 255, ${this.alpha * 0.5})`;
+            ctx.lineWidth = 2;
+            ctx.stroke();
         }
     }
     
     warpCanvas.addEventListener('click', (e) => {
         const rect = warpCanvas.getBoundingClientRect();
-        for (let i = 0; i < 3; i++) {
-            setTimeout(() => {
-                ripples.push(new Ripple(e.clientX - rect.left, e.clientY - rect.top));
-            }, i * 100);
-        }
+        ripples.push(new Ripple(e.clientX - rect.left, e.clientY - rect.top));
     });
     
-    // Auto-generate ripples more frequently
+    // Auto-generate ripples
     setInterval(() => {
         ripples.push(new Ripple(
             Math.random() * warpCanvas.width,
             Math.random() * warpCanvas.height
         ));
-    }, 800);
+    }, 2000);
     
     function animateWarp() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, warpCanvas.width, warpCanvas.height);
         
         for (let i = ripples.length - 1; i >= 0; i--) {
@@ -468,7 +421,6 @@ if (warpCanvas) {
         }
         
         time++;
-        hue = (hue + 1) % 360;
         requestAnimationFrame(animateWarp);
     }
     
@@ -502,13 +454,13 @@ function createFractals() {
 
 createFractals();
 
-// Magnetic Field Effect - EXTREME MAGNETISM!
+// Magnetic Field Effect - Novel Idea 1
 function createMagneticField() {
     const field = document.getElementById('magneticField');
     if (!field) return;
     
     const particles = [];
-    const numParticles = 60;
+    const numParticles = 30;
     
     for (let i = 0; i < numParticles; i++) {
         const particle = document.createElement('div');
@@ -522,8 +474,7 @@ function createMagneticField() {
             baseX: Math.random() * window.innerWidth,
             baseY: Math.random() * window.innerHeight,
             vx: 0,
-            vy: 0,
-            angle: Math.random() * Math.PI * 2
+            vy: 0
         });
     }
     
@@ -536,31 +487,21 @@ function createMagneticField() {
     });
     
     function updateMagnetic() {
-        particles.forEach((p, index) => {
+        particles.forEach(p => {
             const rect = field.getBoundingClientRect();
             const dx = mouseX - (p.baseX + rect.left);
             const dy = mouseY - (p.baseY + rect.top);
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            if (distance < 500) {
-                const force = (500 - distance) / 500;
+            if (distance < 300) {
+                const force = (300 - distance) / 300;
                 const angle = Math.atan2(dy, dx);
-                
-                // Add some orbital motion
-                const orbitalAngle = angle + Math.PI / 2;
-                const orbitalForce = force * 50;
-                
-                p.vx = Math.cos(angle) * force * 200 + Math.cos(orbitalAngle) * orbitalForce;
-                p.vy = Math.sin(angle) * force * 200 + Math.sin(orbitalAngle) * orbitalForce;
+                p.vx = Math.cos(angle) * force * 100;
+                p.vy = Math.sin(angle) * force * 100;
             } else {
-                p.vx *= 0.9;
-                p.vy *= 0.9;
+                p.vx *= 0.95;
+                p.vy *= 0.95;
             }
-            
-            // Add some autonomous floating
-            p.angle += 0.02;
-            p.vx += Math.cos(p.angle) * 2;
-            p.vy += Math.sin(p.angle) * 2;
             
             const newX = p.baseX + p.vx;
             const newY = p.baseY + p.vy;
@@ -568,16 +509,9 @@ function createMagneticField() {
             p.element.style.left = newX + 'px';
             p.element.style.top = newY + 'px';
             
-            const intensity = Math.min(Math.abs(p.vx) + Math.abs(p.vy), 200) / 200;
-            const scale = 1 + intensity * 2;
-            p.element.style.transform = `scale(${scale}) rotate(${p.angle * 100}deg)`;
-            
-            const glowSize = 20 + intensity * 80;
-            p.element.style.boxShadow = `
-                0 0 ${glowSize}px var(--primary),
-                0 0 ${glowSize * 2}px var(--secondary),
-                inset 0 0 ${glowSize / 2}px rgba(255, 255, 255, 0.5)
-            `;
+            const intensity = Math.min(Math.abs(p.vx) + Math.abs(p.vy), 100) / 100;
+            p.element.style.transform = `scale(${1 + intensity})`;
+            p.element.style.boxShadow = `0 0 ${20 + intensity * 30}px var(--primary)`;
         });
         
         requestAnimationFrame(updateMagnetic);
@@ -630,7 +564,7 @@ function createVelocityBars() {
 
 createVelocityBars();
 
-// Pixelation Effect - EXTREME PIXELS!
+// Pixelation Effect - Novel Idea 3
 const pixelCanvas = document.getElementById('pixelCanvas');
 if (pixelCanvas) {
     const ctx = pixelCanvas.getContext('2d');
@@ -639,63 +573,43 @@ if (pixelCanvas) {
     
     let pixelSize = 1;
     let growing = true;
-    let angle = 0;
-    let hue = 0;
+    
+    const colors = ['#00ff88', '#0088ff', '#ff0088', '#ffff00', '#00ffff', '#ff00ff'];
     
     function drawPixelArt() {
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, pixelCanvas.width, pixelCanvas.height);
         
-        const centerX = pixelCanvas.width / 2;
-        const centerY = pixelCanvas.height / 2;
-        
         for (let x = 0; x < pixelCanvas.width; x += pixelSize) {
             for (let y = 0; y < pixelCanvas.height; y += pixelSize) {
-                const dx = x - centerX;
-                const dy = y - centerY;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const angleToCenter = Math.atan2(dy, dx);
+                const distance = Math.sqrt(
+                    Math.pow(x - pixelCanvas.width / 2, 2) + 
+                    Math.pow(y - pixelCanvas.height / 2, 2)
+                );
                 
-                if (distance < 400) {
-                    const waveFactor = Math.sin(distance * 0.02 + angle) * 0.5 + 0.5;
-                    const rotationFactor = Math.sin(angleToCenter * 5 + angle) * 0.5 + 0.5;
-                    const combinedFactor = (waveFactor + rotationFactor) / 2;
-                    
-                    const pixelHue = (hue + distance * 0.5 + angleToCenter * 50) % 360;
-                    const saturation = 50 + combinedFactor * 50;
-                    const lightness = 40 + combinedFactor * 40;
-                    
-                    ctx.fillStyle = `hsl(${pixelHue}, ${saturation}%, ${lightness}%)`;
+                if (distance < 200) {
+                    const colorIndex = Math.floor((distance / 200) * colors.length);
+                    ctx.fillStyle = colors[colorIndex];
                     ctx.fillRect(x, y, pixelSize, pixelSize);
-                    
-                    // Add glow to some pixels
-                    if (combinedFactor > 0.7) {
-                        ctx.shadowBlur = 10;
-                        ctx.shadowColor = ctx.fillStyle;
-                        ctx.fillRect(x, y, pixelSize, pixelSize);
-                        ctx.shadowBlur = 0;
-                    }
                 }
             }
         }
         
         if (growing) {
-            pixelSize += 0.5;
-            if (pixelSize > 30) growing = false;
+            pixelSize += 0.2;
+            if (pixelSize > 20) growing = false;
         } else {
-            pixelSize -= 0.5;
+            pixelSize -= 0.2;
             if (pixelSize < 1) growing = true;
         }
         
-        angle += 0.1;
-        hue = (hue + 2) % 360;
         requestAnimationFrame(drawPixelArt);
     }
     
     drawPixelArt();
 }
 
-// DNA Helix Animation - EXTREME HELIX!
+// DNA Helix Animation - Novel Idea 5
 const dnaCanvas = document.getElementById('dnaCanvas');
 if (dnaCanvas) {
     const ctx = dnaCanvas.getContext('2d');
@@ -703,19 +617,18 @@ if (dnaCanvas) {
     dnaCanvas.height = window.innerHeight;
     
     let angle = 0;
-    const helixPoints = 150;
-    const radius = 150;
-    const spacing = 6;
-    let hue = 0;
+    const helixPoints = 100;
+    const radius = 100;
+    const spacing = 8;
     
     class DNAParticle {
         constructor(index) {
             this.index = index;
-            this.angle = (index / helixPoints) * Math.PI * 6;
+            this.angle = (index / helixPoints) * Math.PI * 4;
         }
         
         update() {
-            this.angle += 0.05;
+            this.angle += 0.02;
         }
         
         draw(yOffset) {
@@ -723,38 +636,25 @@ if (dnaCanvas) {
             const x1 = dnaCanvas.width / 2 + Math.cos(this.angle) * radius;
             const x2 = dnaCanvas.width / 2 + Math.cos(this.angle + Math.PI) * radius;
             
-            const particleHue1 = (hue + this.index * 2) % 360;
-            const particleHue2 = (hue + this.index * 2 + 180) % 360;
-            
-            // First strand with glow
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = `hsl(${particleHue1}, 100%, 60%)`;
+            // First strand
             ctx.beginPath();
-            ctx.arc(x1, y, 8, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(${particleHue1}, 100%, 60%)`;
+            ctx.arc(x1, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#00ff88';
             ctx.fill();
             
-            // Second strand with glow
-            ctx.shadowColor = `hsl(${particleHue2}, 100%, 60%)`;
+            // Second strand
             ctx.beginPath();
-            ctx.arc(x2, y, 8, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(${particleHue2}, 100%, 60%)`;
+            ctx.arc(x2, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#0088ff';
             ctx.fill();
-            
-            ctx.shadowBlur = 0;
             
             // Connecting line
-            if (this.index % 2 === 0) {
-                const gradient = ctx.createLinearGradient(x1, y, x2, y);
-                gradient.addColorStop(0, `hsla(${particleHue1}, 100%, 60%, 0.6)`);
-                gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
-                gradient.addColorStop(1, `hsla(${particleHue2}, 100%, 60%, 0.6)`);
-                
+            if (this.index % 3 === 0) {
                 ctx.beginPath();
                 ctx.moveTo(x1, y);
                 ctx.lineTo(x2, y);
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = 4;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 2;
                 ctx.stroke();
             }
         }
@@ -766,7 +666,7 @@ if (dnaCanvas) {
     }
     
     function animateDNA() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
         ctx.fillRect(0, 0, dnaCanvas.width, dnaCanvas.height);
         
         const yOffset = (dnaCanvas.height / 2) - (helixPoints * spacing / 2);
@@ -776,7 +676,6 @@ if (dnaCanvas) {
             particle.draw(yOffset);
         });
         
-        hue = (hue + 1) % 360;
         requestAnimationFrame(animateDNA);
     }
     
