@@ -782,7 +782,565 @@ if (kaleidoscope) {
     });
 }
 
+// Table of Contents - Scroll Spy and Navigation
+const tocItems = document.querySelectorAll('.toc-item');
+const progressBar = document.getElementById('progressBar');
+const tocToggle = document.getElementById('tocToggle');
+const tocSidebar = document.getElementById('tocSidebar');
+
+// Smooth scroll to sections
+tocItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = item.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+            targetSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Toggle sidebar visibility
+tocToggle.addEventListener('click', () => {
+    tocSidebar.classList.toggle('hidden');
+});
+
+// Scroll spy - update active section
+function updateActiveSection() {
+    const scrollPosition = window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    
+    // Update progress bar
+    const scrollPercent = (scrollPosition / (documentHeight - windowHeight)) * 100;
+    progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+    
+    // Find active section
+    let currentSection = null;
+    const sections = document.querySelectorAll('section[id]');
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            currentSection = section;
+        }
+    });
+    
+    // Update active TOC item
+    tocItems.forEach(item => {
+        item.classList.remove('active');
+        
+        if (currentSection) {
+            const itemHref = item.getAttribute('href');
+            if (itemHref === `#${currentSection.id}`) {
+                item.classList.add('active');
+            }
+        }
+    });
+    
+    // If at the top, activate first item
+    if (scrollPosition < 100) {
+        tocItems[0].classList.add('active');
+    }
+}
+
+// Throttle scroll events for performance
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
+    }
+    
+    scrollTimeout = window.requestAnimationFrame(() => {
+        updateActiveSection();
+    });
+});
+
+// Initial call
+updateActiveSection();
+
+// Highlight TOC item on hover
+tocItems.forEach(item => {
+    item.addEventListener('mouseenter', function() {
+        const number = this.querySelector('.toc-number');
+        if (number) {
+            number.style.transform = 'scale(1.2)';
+            number.style.transition = 'transform 0.3s ease';
+        }
+    });
+    
+    item.addEventListener('mouseleave', function() {
+        const number = this.querySelector('.toc-number');
+        if (number) {
+            number.style.transform = 'scale(1)';
+        }
+    });
+});
+
+// Feature 31: WebGL Shader Waves
+const shaderCanvas = document.getElementById('shaderCanvas');
+if (shaderCanvas) {
+    const ctx = shaderCanvas.getContext('2d');
+    shaderCanvas.width = window.innerWidth;
+    shaderCanvas.height = window.innerHeight;
+    
+    let time = 0;
+    
+    function drawShaderWaves() {
+        const imageData = ctx.createImageData(shaderCanvas.width, shaderCanvas.height);
+        const data = imageData.data;
+        
+        for (let y = 0; y < shaderCanvas.height; y++) {
+            for (let x = 0; x < shaderCanvas.width; x++) {
+                const i = (y * shaderCanvas.width + x) * 4;
+                
+                const wave = Math.sin(x * 0.01 + time) * Math.cos(y * 0.01 + time);
+                const r = Math.floor(Math.abs(wave) * 128 + 127);
+                const g = Math.floor(Math.abs(Math.sin(wave + time * 0.5)) * 255);
+                const b = Math.floor(Math.abs(Math.cos(wave - time * 0.5)) * 255);
+                
+                data[i] = r;
+                data[i + 1] = g;
+                data[i + 2] = b;
+                data[i + 3] = 255;
+            }
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
+        time += 0.05;
+        requestAnimationFrame(drawShaderWaves);
+    }
+    
+    drawShaderWaves();
+}
+
+// Feature 33: Audio Visualizer
+const audioCanvas = document.getElementById('audioCanvas');
+const audioToggle = document.getElementById('audioToggle');
+let audioContext, analyser, dataArray, bufferLength, oscillator;
+let audioPlaying = false;
+
+if (audioToggle) {
+    audioToggle.addEventListener('click', () => {
+        if (!audioPlaying) {
+            startAudio();
+            audioToggle.textContent = '🔇 STOP AUDIO';
+        } else {
+            stopAudio();
+            audioToggle.textContent = '🎵 START AUDIO';
+        }
+        audioPlaying = !audioPlaying;
+    });
+}
+
+function startAudio() {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+    
+    oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 2);
+    
+    gainNode.gain.value = 0.3;
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(analyser);
+    analyser.connect(audioContext.destination);
+    
+    oscillator.start();
+    drawAudioVisualizer();
+}
+
+function stopAudio() {
+    if (oscillator) {
+        oscillator.stop();
+        oscillator = null;
+    }
+}
+
+function drawAudioVisualizer() {
+    if (!audioPlaying) return;
+    
+    const ctx = audioCanvas.getContext('2d');
+    audioCanvas.width = window.innerWidth;
+    audioCanvas.height = window.innerHeight;
+    
+    analyser.getByteFrequencyData(dataArray);
+    
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.fillRect(0, 0, audioCanvas.width, audioCanvas.height);
+    
+    const barWidth = (audioCanvas.width / bufferLength) * 2.5;
+    let barHeight;
+    let x = 0;
+    
+    for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] * 2;
+        
+        const hue = (i / bufferLength) * 360;
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fillRect(x, audioCanvas.height - barHeight, barWidth, barHeight);
+        
+        x += barWidth + 1;
+    }
+    
+    requestAnimationFrame(drawAudioVisualizer);
+}
+
+// Feature 35: Isometric Grid
+function createIsometricGrid() {
+    const grid = document.getElementById('isometricGrid');
+    if (!grid) return;
+    
+    for (let i = 0; i < 100; i++) {
+        const cube = document.createElement('div');
+        cube.className = 'iso-cube';
+        cube.style.animationDelay = `${i * 0.02}s`;
+        grid.appendChild(cube);
+    }
+}
+
+createIsometricGrid();
+
+// Feature 36: Typing Code Animation
+const typingCode = document.getElementById('typingCode');
+if (typingCode) {
+    const codeText = `function animateWorld() {
+  const magic = true;
+  
+  if (magic) {
+    createBeauty();
+    spreadJoy();
+  }
+  
+  return wonder;
+}
+
+animateWorld();`;
+    
+    let i = 0;
+    
+    function typeCode() {
+        if (i < codeText.length) {
+            typingCode.textContent += codeText.charAt(i);
+            i++;
+            setTimeout(typeCode, 50);
+        } else {
+            setTimeout(() => {
+                i = 0;
+                typingCode.textContent = '';
+                typeCode();
+            }, 3000);
+        }
+    }
+    
+    typeCode();
+}
+
+// Feature 38: Mesh Gradient Animation
+const meshGradient = document.getElementById('meshGradient');
+if (meshGradient) {
+    document.addEventListener('mousemove', (e) => {
+        const rect = meshGradient.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            
+            meshGradient.style.background = `
+                radial-gradient(at ${x}% ${y}%, #ff0080 0%, transparent 50%),
+                radial-gradient(at ${100-x}% ${y}%, #00f0ff 0%, transparent 50%),
+                radial-gradient(at ${x}% ${100-y}%, #00ff88 0%, transparent 50%),
+                radial-gradient(at ${100-x}% ${100-y}%, #ff8800 0%, transparent 50%)
+            `;
+        }
+    });
+}
+
+// Feature 39: Number Counter
+const counters = document.querySelectorAll('.counter-number');
+let counterAnimated = false;
+
+function animateCounter(element) {
+    const target = parseInt(element.getAttribute('data-target'));
+    const duration = 2000;
+    const start = 0;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        const value = Math.floor(start + (target - start) * easeOutQuad(progress));
+        element.textContent = value.toLocaleString();
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+
+function easeOutQuad(t) {
+    return t * (2 - t);
+}
+
+window.addEventListener('scroll', () => {
+    if (counterAnimated) return;
+    
+    const counterSection = document.querySelector('.counter-section');
+    if (counterSection) {
+        const rect = counterSection.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.75) {
+            counterAnimated = true;
+            counters.forEach(counter => animateCounter(counter));
+        }
+    }
+});
+
+// Feature 40: Staggered Grid
+function createStaggerGrid() {
+    const grid = document.getElementById('staggerGrid');
+    if (!grid) return;
+    
+    for (let i = 0; i < 48; i++) {
+        const item = document.createElement('div');
+        item.className = 'stagger-item';
+        grid.appendChild(item);
+    }
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const items = entry.target.querySelectorAll('.stagger-item');
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                    }, index * 30);
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+    
+    observer.observe(grid);
+}
+
+createStaggerGrid();
+
+// Feature 41: Text Scramble Effect
+const scrambleText = document.getElementById('scrambleText');
+if (scrambleText) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+    const originalText = scrambleText.getAttribute('data-text');
+    
+    function scramble() {
+        let iterations = 0;
+        const interval = setInterval(() => {
+            scrambleText.textContent = originalText
+                .split('')
+                .map((char, index) => {
+                    if (index < iterations) {
+                        return originalText[index];
+                    }
+                    return chars[Math.floor(Math.random() * chars.length)];
+                })
+                .join('');
+            
+            if (iterations >= originalText.length) {
+                clearInterval(interval);
+            }
+            
+            iterations += 1/3;
+        }, 50);
+    }
+    
+    scrambleText.addEventListener('mouseenter', scramble);
+    
+    setInterval(() => {
+        scramble();
+    }, 5000);
+}
+
+// Feature 42: Parallax Depth Cards
+const depthCards = document.querySelectorAll('.depth-card');
+if (depthCards.length > 0) {
+    document.addEventListener('mousemove', (e) => {
+        const container = document.querySelector('.depth-container');
+        if (!container) return;
+        
+        const rect = container.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+            const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+            const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+            
+            depthCards.forEach((card, index) => {
+                const depth = (index + 1) * 20;
+                card.style.transform = `
+                    translate(${x * depth}px, ${y * depth}px)
+                `;
+            });
+        }
+    });
+}
+
+// Feature 43: Elastic Rubber Band
+const elasticBall = document.getElementById('elasticBall');
+const bandPath = document.getElementById('bandPath');
+if (elasticBall && bandPath) {
+    const container = document.querySelector('.elastic-container');
+    const centerX = 400;
+    const centerY = 300;
+    
+    let ballX = centerX;
+    let ballY = centerY;
+    let isDragging = false;
+    
+    elasticBall.style.left = centerX + 'px';
+    elasticBall.style.top = centerY + 'px';
+    
+    elasticBall.addEventListener('mousedown', (e) => {
+        isDragging = true;
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging && container) {
+            const rect = container.getBoundingClientRect();
+            ballX = e.clientX - rect.left;
+            ballY = e.clientY - rect.top;
+            
+            elasticBall.style.left = ballX + 'px';
+            elasticBall.style.top = ballY + 'px';
+            
+            bandPath.setAttribute('d', `M ${centerX} ${centerY} Q ${(centerX + ballX) / 2} ${(centerY + ballY) / 2} ${ballX} ${ballY}`);
+        }
+    });
+    
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            
+            const dx = centerX - ballX;
+            const dy = centerY - ballY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const steps = 30;
+            let step = 0;
+            
+            function snapBack() {
+                if (step < steps) {
+                    const progress = step / steps;
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    
+                    ballX += dx / steps;
+                    ballY += dy / steps;
+                    
+                    elasticBall.style.left = ballX + 'px';
+                    elasticBall.style.top = ballY + 'px';
+                    bandPath.setAttribute('d', `M ${centerX} ${centerY} L ${ballX} ${ballY}`);
+                    
+                    step++;
+                    requestAnimationFrame(snapBack);
+                } else {
+                    bandPath.setAttribute('d', '');
+                }
+            }
+            
+            snapBack();
+        }
+    });
+}
+
+// Feature 45: Particle Explosion
+const explosionCanvas = document.getElementById('explosionCanvas');
+const explosionTrigger = document.getElementById('explosionTrigger');
+if (explosionCanvas && explosionTrigger) {
+    const ctx = explosionCanvas.getContext('2d');
+    explosionCanvas.width = window.innerWidth;
+    explosionCanvas.height = window.innerHeight;
+    
+    let particles = [];
+    
+    class ExplosionParticle {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 5 + 2;
+            this.vx = Math.cos(angle) * speed;
+            this.vy = Math.sin(angle) * speed;
+            this.life = 100;
+            this.size = Math.random() * 5 + 2;
+            this.color = `hsl(${Math.random() * 60 + 120}, 100%, 50%)`;
+        }
+        
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vy += 0.1; // gravity
+            this.life--;
+        }
+        
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.life / 100;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+    }
+    
+    function createExplosion(x, y) {
+        for (let i = 0; i < 100; i++) {
+            particles.push(new ExplosionParticle(x, y));
+        }
+    }
+    
+    function animateExplosion() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, explosionCanvas.width, explosionCanvas.height);
+        
+        for (let i = particles.length - 1; i >= 0; i--) {
+            particles[i].update();
+            particles[i].draw();
+            
+            if (particles[i].life <= 0) {
+                particles.splice(i, 1);
+            }
+        }
+        
+        requestAnimationFrame(animateExplosion);
+    }
+    
+    animateExplosion();
+    
+    explosionTrigger.addEventListener('click', (e) => {
+        const rect = explosionCanvas.getBoundingClientRect();
+        createExplosion(rect.width / 2, rect.height / 2);
+        
+        explosionTrigger.style.transform = 'translate(-50%, -50%) scale(0)';
+        setTimeout(() => {
+            explosionTrigger.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 500);
+    });
+}
+
 console.log('🎨 Modern Web Showcase - Interactive Experience Loaded!');
-console.log('💫 Featuring 30 cutting-edge web animation techniques');
-console.log('✨ 15 Classic Effects + 15 Wild & Novel Animations');
+console.log('💫 Featuring 45 cutting-edge web animation techniques');
+console.log('✨ 30 Base Effects + 15 Advanced HTML5 Features');
+console.log('🗺️ Navigation sidebar with scroll tracking active!');
 
