@@ -12,6 +12,11 @@
     --light: #ffffff;
 }
 
+html {
+    scroll-snap-type: y proximity;
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--dark);
@@ -77,6 +82,8 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
 }
 
 .hero-content {
@@ -213,6 +220,8 @@ body {
     justify-content: center;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
 }
 
 .feature-content {

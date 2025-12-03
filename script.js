@@ -229,7 +229,7 @@ document.addEventListener('mousemove', (e) => {
     }
 });
 
-// Smooth Scrolling
+// Smooth Scrolling with Snap
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -237,7 +237,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if (target) {
             target.scrollIntoView({
                 behavior: 'smooth',
-                block: 'start'
+                block: 'start',
+                inline: 'nearest'
             });
         }
     });
