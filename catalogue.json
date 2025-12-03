@@ -1,0 +1,11 @@
+{
+  "id": "ModernWebDesign",
+  "title": "ModernWebDesign",
+  "oneLiner": "A showcase of modern web design elements in 2025",
+  "demoUrl": "https://kylemath.github.io/ModernWebDesign",
+  "screenshot": "https://raw.githubusercontent.com/kylemath/ModernWebDesign/main/screenshot.png",
+  "kind": "project",
+  "categories": ["web", "design", "art"],
+  "tags": ["web", "design", "art"],
+  "status": "published"
+}

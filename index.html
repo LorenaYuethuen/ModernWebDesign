@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Web Showcase - Interactive Experience</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Mouse follower -->
+    <div class="cursor-follower"></div>
+    <div class="cursor-glow"></div>
+
+    <!-- Floating particles -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="glitch-text" data-text="MODERN WEB">MODERN WEB</h1>
+            <p class="subtitle">Experience the Future of Design</p>
+            <div class="scroll-indicator">
+                <span>Scroll to Explore</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+        <div class="morphing-bg"></div>
+    </section>
+
+    <!-- Feature 1: Parallax Scrolling -->
+    <section class="feature parallax-section">
+        <div class="parallax-layer layer-1"></div>
+        <div class="parallax-layer layer-2"></div>
+        <div class="parallax-layer layer-3"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">01</h2>
+            <h3>Parallax Scrolling</h3>
+            <p>Multiple layers moving at different speeds create depth and immersion</p>
+        </div>
+    </section>
+
+    <!-- Feature 2: Glassmorphism -->
+    <section class="feature glass-section">
+        <div class="glass-card">
+            <h2 class="feature-number">02</h2>
+            <h3>Glassmorphism</h3>
+            <p>Frosted glass effects with backdrop blur</p>
+            <div class="glass-orb orb-1"></div>
+            <div class="glass-orb orb-2"></div>
+        </div>
+    </section>
+
+    <!-- Feature 3: 3D Transforms -->
+    <section class="feature transform-section">
+        <div class="cube-container">
+            <div class="cube">
+                <div class="cube-face front">3D</div>
+                <div class="cube-face back">CSS</div>
+                <div class="cube-face right">TRANS</div>
+                <div class="cube-face left">FORM</div>
+                <div class="cube-face top">MAGIC</div>
+                <div class="cube-face bottom">SPACE</div>
+            </div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">03</h2>
+            <h3>3D Transforms</h3>
+            <p>Rotate, scale, and transform elements in 3D space</p>
+        </div>
+    </section>
+
+    <!-- Feature 4: Gradient Animations -->
+    <section class="feature gradient-section">
+        <div class="animated-gradient"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">04</h2>
+            <h3>Animated Gradients</h3>
+            <p>Dynamic color transitions that flow like liquid</p>
+        </div>
+    </section>
+
+    <!-- Feature 5: Morphing Shapes -->
+    <section class="feature morph-section">
+        <svg class="morphing-svg" viewBox="0 0 200 200">
+            <path class="morph-path" fill="#00ff88">
+                <animate attributeName="d" 
+                    dur="5s" 
+                    repeatCount="indefinite"
+                    values="M45,-65C57,-55,65,-43,68,-30C71,-17,69,-4,65,8C61,20,55,31,46,39C37,47,25,52,12,54C-1,56,-15,55,-27,49C-39,43,-49,32,-57,19C-65,6,-71,-9,-68,-23C-65,-37,-53,-50,-40,-60C-27,-70,-13,-77,2,-80C17,-83,33,-75,45,-65Z;
+                            M39,-63C49,-54,55,-42,58,-30C61,-18,61,-6,59,6C57,18,53,30,46,39C39,48,29,54,18,57C7,60,-5,60,-17,57C-29,54,-41,48,-50,39C-59,30,-65,18,-66,5C-67,-8,-63,-22,-56,-33C-49,-44,-39,-52,-28,-60C-17,-68,-4,-76,8,-87C20,-98,29,-72,39,-63Z;
+                            M45,-65C57,-55,65,-43,68,-30C71,-17,69,-4,65,8C61,20,55,31,46,39C37,47,25,52,12,54C-1,56,-15,55,-27,49C-39,43,-49,32,-57,19C-65,6,-71,-9,-68,-23C-65,-37,-53,-50,-40,-60C-27,-70,-13,-77,2,-80C17,-83,33,-75,45,-65Z"/>
+            </path>
+        </svg>
+        <div class="feature-content">
+            <h2 class="feature-number">05</h2>
+            <h3>Morphing Shapes</h3>
+            <p>SVG path animations that flow organically</p>
+        </div>
+    </section>
+
+    <!-- Feature 6: Text Effects -->
+    <section class="feature text-section">
+        <div class="text-effects">
+            <h2 class="wave-text">
+                <span>W</span><span>A</span><span>V</span><span>E</span>
+                <span> </span>
+                <span>T</span><span>E</span><span>X</span><span>T</span>
+            </h2>
+            <h2 class="split-text">SPLIT TEXT</h2>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">06</h2>
+            <h3>Text Animations</h3>
+            <p>Dynamic typography that comes alive</p>
+        </div>
+    </section>
+
+    <!-- Feature 7: Clip Path Animations -->
+    <section class="feature clip-section">
+        <div class="clip-container">
+            <div class="clip-shape"></div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">07</h2>
+            <h3>Clip-Path Morphing</h3>
+            <p>Geometric shapes that transform seamlessly</p>
+        </div>
+    </section>
+
+    <!-- Feature 8: Mouse Reactive -->
+    <section class="feature mouse-section">
+        <div class="mouse-grid" id="mouseGrid"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">08</h2>
+            <h3>Mouse Reactive Grid</h3>
+            <p>Elements that respond to your cursor position</p>
+        </div>
+    </section>
+
+    <!-- Feature 9: Scroll Triggered Animations -->
+    <section class="feature scroll-section">
+        <div class="scroll-box box-1"></div>
+        <div class="scroll-box box-2"></div>
+        <div class="scroll-box box-3"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">09</h2>
+            <h3>Scroll Animations</h3>
+            <p>Elements reveal and animate as you scroll</p>
+        </div>
+    </section>
+
+    <!-- Feature 10: Neon Effects -->
+    <section class="feature neon-section">
+        <div class="neon-text">NEON</div>
+        <div class="neon-circle"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">10</h2>
+            <h3>Neon Glow</h3>
+            <p>Vibrant glowing effects reminiscent of 90s aesthetics</p>
+        </div>
+    </section>
+
+    <!-- Feature 11: Liquid Distortion -->
+    <section class="feature liquid-section">
+        <div class="liquid-blob"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">11</h2>
+            <h3>Liquid Distortion</h3>
+            <p>Fluid blob animations with blur filters</p>
+        </div>
+    </section>
+
+    <!-- Feature 12: Grid Patterns -->
+    <section class="feature grid-pattern-section">
+        <div class="animated-grid"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">12</h2>
+            <h3>Dynamic Grids</h3>
+            <p>Animated grid patterns that pulse with energy</p>
+        </div>
+    </section>
+
+    <!-- Feature 13: Color Shift -->
+    <section class="feature color-shift-section">
+        <div class="color-boxes">
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">13</h2>
+            <h3>Dynamic Color Shifts</h3>
+            <p>Hue rotation and color transitions</p>
+        </div>
+    </section>
+
+    <!-- Feature 14: Particle System -->
+    <section class="feature particle-section">
+        <canvas id="particleCanvas"></canvas>
+        <div class="feature-content">
+            <h2 class="feature-number">14</h2>
+            <h3>Particle Systems</h3>
+            <p>Canvas-based particle effects</p>
+        </div>
+    </section>
+
+    <!-- Feature 15: Infinite Scroll Loop -->
+    <section class="feature infinite-section">
+        <div class="infinite-scroller">
+            <div class="infinite-content">
+                <span>INFINITE</span>
+                <span>SCROLL</span>
+                <span>ANIMATION</span>
+                <span>LOOP</span>
+                <span>•</span>
+            </div>
+            <div class="infinite-content">
+                <span>INFINITE</span>
+                <span>SCROLL</span>
+                <span>ANIMATION</span>
+                <span>LOOP</span>
+                <span>•</span>
+            </div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">15</h2>
+            <h3>Infinite Scroll Loop</h3>
+            <p>Seamless looping animations</p>
+        </div>
+    </section>
+
+    <!-- Feature 16: Matrix Digital Rain -->
+    <section class="feature matrix-section">
+        <canvas id="matrixCanvas"></canvas>
+        <div class="feature-content">
+            <h2 class="feature-number">16</h2>
+            <h3>Matrix Digital Rain</h3>
+            <p>Cascading code characters like The Matrix</p>
+        </div>
+    </section>
+
+    <!-- Feature 17: Holographic Shimmer -->
+    <section class="feature holo-section">
+        <div class="holographic-card">
+            <div class="holo-text">HOLOGRAM</div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">17</h2>
+            <h3>Holographic Effect</h3>
+            <p>Rainbow shimmer that shifts with perspective</p>
+        </div>
+    </section>
+
+    <!-- Feature 18: Kaleidoscope Mirror -->
+    <section class="feature kaleidoscope-section">
+        <div class="kaleidoscope-container">
+            <div class="kaleid-piece"></div>
+            <div class="kaleid-piece"></div>
+            <div class="kaleid-piece"></div>
+            <div class="kaleid-piece"></div>
+            <div class="kaleid-piece"></div>
+            <div class="kaleid-piece"></div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">18</h2>
+            <h3>Kaleidoscope Mirror</h3>
+            <p>Symmetrical patterns that rotate infinitely</p>
+        </div>
+    </section>
+
+    <!-- Feature 19: VHS Glitch -->
+    <section class="feature vhs-section">
+        <div class="vhs-screen">
+            <div class="vhs-text">VHS REWIND</div>
+            <div class="vhs-noise"></div>
+            <div class="vhs-lines"></div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">19</h2>
+            <h3>VHS Distortion</h3>
+            <p>Retro analog video glitch effects</p>
+        </div>
+    </section>
+
+    <!-- Feature 20: 3D Page Flip -->
+    <section class="feature page-flip-section">
+        <div class="book-container">
+            <div class="page page-front">
+                <h3>PAGE 1</h3>
+            </div>
+            <div class="page page-back">
+                <h3>PAGE 2</h3>
+            </div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">20</h2>
+            <h3>3D Page Flip</h3>
+            <p>Realistic book page turning animation</p>
+        </div>
+    </section>
+
+    <!-- Feature 21: Chromatic Aberration -->
+    <section class="feature chromatic-section">
+        <div class="chromatic-text" data-text="CHROMATIC">CHROMATIC</div>
+        <div class="chromatic-shape"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">21</h2>
+            <h3>Chromatic Aberration</h3>
+            <p>RGB color separation for psychedelic effects</p>
+        </div>
+    </section>
+
+    <!-- Feature 22: Recursive Fractal -->
+    <section class="feature fractal-section">
+        <div class="fractal-container" id="fractalContainer"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">22</h2>
+            <h3>Recursive Fractals</h3>
+            <p>Self-similar patterns that repeat infinitely</p>
+        </div>
+    </section>
+
+    <!-- Feature 23: Time Warp Distortion -->
+    <section class="feature timewarp-section">
+        <canvas id="warpCanvas"></canvas>
+        <div class="feature-content">
+            <h2 class="feature-number">23</h2>
+            <h3>Time Warp Distortion</h3>
+            <p>Ripple effects that bend space and time</p>
+        </div>
+    </section>
+
+    <!-- Feature 24: Layered Text Reveal -->
+    <section class="feature layer-text-section">
+        <div class="layered-text-container">
+            <span class="text-layer layer-r" data-text="LAYERS">LAYERS</span>
+            <span class="text-layer layer-g" data-text="LAYERS">LAYERS</span>
+            <span class="text-layer layer-b" data-text="LAYERS">LAYERS</span>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">24</h2>
+            <h3>Layered Text Explosion</h3>
+            <p>Text that splits into RGB layers on hover</p>
+        </div>
+    </section>
+
+    <!-- Feature 25: Glitch Art Displacement -->
+    <section class="feature displacement-section">
+        <div class="glitch-art">
+            <div class="glitch-slice"></div>
+            <div class="glitch-slice"></div>
+            <div class="glitch-slice"></div>
+            <div class="glitch-slice"></div>
+            <div class="glitch-slice"></div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">25</h2>
+            <h3>Displacement Glitch</h3>
+            <p>Sliced and offset geometry for glitch art</p>
+        </div>
+    </section>
+
+    <!-- Feature 26: Magnetic Field (Novel Idea 1) -->
+    <section class="feature magnetic-section">
+        <div class="magnetic-field" id="magneticField"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">26</h2>
+            <h3>Magnetic Field</h3>
+            <p>Elements attract and repel from your cursor</p>
+        </div>
+    </section>
+
+    <!-- Feature 27: Scroll Velocity Bars (Novel Idea 2) -->
+    <section class="feature velocity-section">
+        <div class="velocity-bars" id="velocityBars"></div>
+        <div class="feature-content">
+            <h2 class="feature-number">27</h2>
+            <h3>Velocity Visualizer</h3>
+            <p>Bars that react to scroll speed like music equalizer</p>
+        </div>
+    </section>
+
+    <!-- Feature 28: Pixelation Transition (Novel Idea 3) -->
+    <section class="feature pixel-section">
+        <canvas id="pixelCanvas"></canvas>
+        <div class="feature-content pixel-content">
+            <h2 class="feature-number">28</h2>
+            <h3>Pixelation Morph</h3>
+            <p>Dynamic pixel size transitions</p>
+        </div>
+    </section>
+
+    <!-- Feature 29: Portal Wormhole (Novel Idea 4) -->
+    <section class="feature portal-section">
+        <div class="portal-container">
+            <div class="portal-ring"></div>
+            <div class="portal-ring"></div>
+            <div class="portal-ring"></div>
+            <div class="portal-ring"></div>
+            <div class="portal-ring"></div>
+            <div class="portal-core"></div>
+        </div>
+        <div class="feature-content">
+            <h2 class="feature-number">29</h2>
+            <h3>Portal Wormhole</h3>
+            <p>Spiraling tunnel that draws you in</p>
+        </div>
+    </section>
+
+    <!-- Feature 30: DNA Helix (Novel Idea 5) -->
+    <section class="feature dna-section">
+        <canvas id="dnaCanvas"></canvas>
+        <div class="feature-content">
+            <h2 class="feature-number">30</h2>
+            <h3>DNA Helix Particles</h3>
+            <p>Rotating double helix with flowing particles</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Modern Web Showcase • 2025</p>
+        <p class="small">Built with HTML, CSS, and JavaScript</p>
+        <p class="small">30 Wild Animation Techniques</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
